@@ -1,6 +1,13 @@
 [package]
 name = "core-engine"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
+# Sử dụng 'workspace = true' để lấy version từ file root Cargo.toml chúng ta đã tạo
+serde = { workspace = true }
+sysinfo = { workspace = true }
+# Cần thiết để sử dụng #[async_trait] cho DataProvider
+async-trait = "0.1" 
+# Cần thiết cho các kiểu dữ liệu đồng bộ trong monitor.rs
+tokio = { workspace = true }
