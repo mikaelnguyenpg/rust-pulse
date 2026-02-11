@@ -1,0 +1,18 @@
+[workspace]
+members = [
+    "core-engine",
+    "variants/01-tauri-react/src-tauri", # Chỉ định đích danh shell của tauri
+    "variants/02-dioxus-native",         # Binary thuần
+    "variants/03-tauri-leptos/src-tauri",
+    "variants/04-tauri-dioxus/src-tauri",
+    "benches-suite",
+]
+resolver = "2"
+
+[workspace.dependencies]
+# Định nghĩa tập trung để các sub-crates dùng chung bản build, giảm thời gian compile
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+sysinfo = "0.30"
+# Alias này cực kỳ hữu ích để các biến thể gọi path gọn hơn
+core-engine = { path = "./core-engine" }
