@@ -144,6 +144,16 @@ rust-pulse/
 | 1.2      | The Collector Logic | Triển khai SystemMonitor sử dụng sysinfo.         | Tối ưu hóa việc quét CPU/RAM (không quét lại toàn bộ nếu không cần thiết).                 |
 | 1.3      | Async Polling Loop  | Thiết lập vòng lặp tokio::spawn và mpsc::channel. | "Giữ cho việc thu thập dữ liệu chạy ngầm, không chặn (block) luồng xử lý chính."           |
 
+#### Chi tiết kế hoạch cho Bước 1.2 & 1.3:
+
+Trong phần tiếp theo, chúng ta sẽ viết theo hướng Trait-based (Dựa trên giao diện chung):
+
+1. Thiết kế DataProvider Trait: \* Giúp bạn có thể tạo RealTimeProvider (lấy dữ liệu từ máy thật) và MockProvider (dữ liệu giả để benchmark sự ổn định của UI).
+2. Quản lý Lifetime trong monitor.rs:
+
+- Thử thách lớn nhất ở đây là sysinfo::System sở hữu (own) dữ liệu, nhưng SystemPulse<'a> lại mượn (borrow) dữ liệu đó.
+- Chúng ta sẽ cần một kỹ thuật gọi là Self-referential struct hoặc đơn giản hơn là đảm bảo System object sống đủ lâu trong vòng lặp Polling.
+
 ### Tổng quan Bước 2: Tauri v2 IPC & Baseline
 
 Giai đoạn này được chia thành 3 bước con chiến lược:
