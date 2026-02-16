@@ -26,10 +26,9 @@ function App() {
 
   useEffect(() => {
     // Lắng nghe event từ Rust
-    const unlisten = listen(PULSE_EVENT, (event) => {
-      const data: SystemPulse = JSON.parse(event.payload as string);
-      console.log("Frontend received pulse: ", data);
-      setPulse(data);
+    const unlisten = listen<SystemPulse>(PULSE_EVENT, (event) => {
+      setPulse(event.payload);
+      console.log("Frontend received pulse: ", event.payload);
     });
 
     return () => {

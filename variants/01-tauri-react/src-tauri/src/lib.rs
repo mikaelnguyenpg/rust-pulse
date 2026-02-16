@@ -26,9 +26,9 @@ pub fn run() {
 
       let app_handle = app.handle().clone();
       tauri::async_runtime::spawn(async move {
-        while let Ok(json_str) = receiver.recv().await {
-          println!("Backend emitting pulse: {}", json_str);
-          let _ = app_handle.emit(&event_name, json_str);
+        while let Ok(pulse_struct) = receiver.recv().await {
+          println!("Backend emitting pulse: {:#?}", pulse_struct);
+          let _ = app_handle.emit(&event_name, &pulse_struct);
         }
       });
       

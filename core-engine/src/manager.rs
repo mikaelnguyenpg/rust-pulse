@@ -3,12 +3,13 @@ use tokio::time::{sleep, Duration};
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use crate::monitor::{DataProvider, RealTimeProvider};
+use crate::models::SystemPulse;
 
 pub struct PulseManager {
     // Dùng Arc<RwLock> để có thể chia sẻ Provider giữa các Task nếu cần
     provider: Arc<RwLock<RealTimeProvider>>,
     // Kênh phát tin: Cho phép nhiều UI cùng lắng nghe một nguồn dữ liệu
-    tx: broadcast::Sender<String>,
+    tx: broadcast::Sender<SystemPulse<'static>>,
 }
 
 impl PulseManager {
@@ -20,7 +21,7 @@ impl PulseManager {
         }
     }
 
-    pub fn subscribe(&self) -> broadcast::Receiver<String> {
+    pub fn subscribe(&self) -> broadcast::Receiver<SystemPulse<'static>> {
         self.tx.subscribe()
     }
 
@@ -32,16 +33,13 @@ impl PulseManager {
             let interval = Duration::from_millis(interval_ms);
             loop {
                 // Mở scope để đảm bảo Lock Guard 'p' được drop ngay sau khi lấy data                
-                let json_data = {
+                let pulse_struct = {
                     let mut p = provider.write().await;
                     let data = p.fetch_data().await;
-                    serde_json::to_string(&data).ok()
+                    data.into_owned()
                 };
 
-                if let Some(json) = json_data {
-                    // Gửi dữ liệu tới tất cả các subscribers (React, Leptos, v.v.)
-                    let _ = tx.send(json);
-                }
+                let _ = tx.send(pulse_struct);
 
                 sleep(interval).await;
             }

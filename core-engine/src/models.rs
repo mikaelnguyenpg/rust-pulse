@@ -18,3 +18,25 @@ pub struct SystemPulse<'a> {
     pub free_mem: u64,
     pub processes: Vec<ProcessPulse<'a>>,
 }
+
+impl<'a> SystemPulse<'a> {
+    pub fn into_owned(self) -> SystemPulse<'static> {
+        SystemPulse {
+            total_cpu: self.total_cpu,
+            total_mem: self.total_mem,
+            free_mem: self.free_mem,
+            processes: self.processes.into_iter().map(|p| p.into_owned()).collect(),
+        }
+    }
+}
+
+impl<'a> ProcessPulse<'a> {
+    pub fn into_owned(self) -> ProcessPulse<'static> {
+        ProcessPulse {
+            pid: self.pid,
+            name: Cow::Owned(self.name.into_owned()), // Chuyển Borrowed str thành Owned String
+            cpu_usage: self.cpu_usage,
+            mem_usage: self.mem_usage,
+        }
+    }
+}
