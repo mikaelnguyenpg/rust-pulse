@@ -1,0 +1,114 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.container {
+  padding: 20px;
+  font-family: "Inter", sans-serif;
+}
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.global-stats {
+  display: flex;
+  gap: 20px;
+}
+.stat-card {
+  background: #1a1a1a;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+.stat-card label {
+  font-size: 12px;
+  color: #888;
+  display: block;
+}
+.stat-card .value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #646cff;
+}
+
+.process-list {
+  height: 50vh;
+  overflow-y: auto;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: #111;
+}
+th {
+  top: 0;
+  background: #222;
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 2px solid #333;
+}
+td {
+  padding: 8px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #222;
+}
+.right {
+  text-align: right;
+}
+.bold {
+  font-weight: bold;
+  color: #4facfe;
+}
+.proc-name {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+tr:hover {
+  background: #1a1a1a;
+}

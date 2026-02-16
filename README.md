@@ -1,12 +1,28 @@
 ## Usage
 
 ```bash
+# Foundation step
 mkdir -p rust-pulse/core-engine
 mkdir -p rust-pulse/variants
 mkdir -p rust-pulse/benches-suite
 cd rust-pulse
 touch Cargo.toml
 cargo init core-engine --lib
+
+# Step 1
+mkdir -p variants/01-tauri-react
+cd variants/01-tauri-react
+npm create vite@latest . -- --template react-ts
+npm install
+npx @tauri-apps/cli init
+# name: rust-pulse-react
+# title: Rust Pulse
+# link: ../dist
+# url: http://localhost:5173
+npm install @tauri-apps/api
+npm run dev # 1st terminal
+npx @tauri-apps/cli dev # 2nd terminal
+npm run tauri dev # or ~2nd
 ```
 
 ## Kiến trúc Hệ thống
@@ -138,18 +154,19 @@ rust-pulse/
 
 ### Tổng quan Bước 1: Core Engine Development
 
-| Bước con | Tên gọi             | Nhiệm vụ chính                                    | Tại sao quan trọng?                                                                        |
-| -------- | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| 1.1      | Data Modeling       | "Định nghĩa Structs với Cow<'a, str> và serde."   | "Đảm bảo dữ liệu ""nhẹ"" nhất khi đi qua đường ống IPC. (Chúng ta vừa làm xong phần này)." |
-| 1.2      | The Collector Logic | Triển khai SystemMonitor sử dụng sysinfo.         | Tối ưu hóa việc quét CPU/RAM (không quét lại toàn bộ nếu không cần thiết).                 |
-| 1.3      | Async Polling Loop  | Thiết lập vòng lặp tokio::spawn và mpsc::channel. | "Giữ cho việc thu thập dữ liệu chạy ngầm, không chặn (block) luồng xử lý chính."           |
+| Bước con | Tên gọi             | Nhiệm vụ chính                                    | Tại sao quan trọng?                                                            |
+| -------- | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 1.1      | Data Modeling       | Định nghĩa Structs với Cow<'a, str> và serde.     | Đảm bảo dữ liệu nhẹ nhất khi đi qua đường ống IPC.                             |
+| 1.2      | The Collector Logic | Triển khai SystemMonitor sử dụng sysinfo.         | Tối ưu hóa việc quét CPU/RAM (không quét lại toàn bộ nếu không cần thiết).     |
+| 1.3      | Async Polling Loop  | Thiết lập vòng lặp tokio::spawn và mpsc::channel. | Giữ cho việc thu thập dữ liệu chạy ngầm, không chặn (block) luồng xử lý chính. |
 
 #### Chi tiết kế hoạch cho Bước 1.2 & 1.3:
 
 Trong phần tiếp theo, chúng ta sẽ viết theo hướng Trait-based (Dựa trên giao diện chung):
 
+1. Thiết lập Models (Zero-copy):
 1. Thiết kế DataProvider Trait: \* Giúp bạn có thể tạo RealTimeProvider (lấy dữ liệu từ máy thật) và MockProvider (dữ liệu giả để benchmark sự ổn định của UI).
-2. Quản lý Lifetime trong monitor.rs:
+1. Quản lý Lifetime trong monitor.rs:
 
 - Thử thách lớn nhất ở đây là sysinfo::System sở hữu (own) dữ liệu, nhưng SystemPulse<'a> lại mượn (borrow) dữ liệu đó.
 - Chúng ta sẽ cần một kỹ thuật gọi là Self-referential struct hoặc đơn giản hơn là đảm bảo System object sống đủ lâu trong vòng lặp Polling.
