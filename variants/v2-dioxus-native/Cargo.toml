@@ -1,0 +1,12 @@
+[package]
+name = "v2-dioxus-native"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dioxus = { version = "0.6", features = ["desktop"] }
+tokio = { version = "1.35", features = ["full"] }
+core-engine = { path = "../../core-engine" }
+
+# Thêm dòng này ở cuối
+[workspace]

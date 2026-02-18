@@ -23,6 +23,11 @@ npm install @tauri-apps/api
 npm run dev # 1st terminal
 npx @tauri-apps/cli dev # 2nd terminal
 npm run tauri dev # or ~2nd
+
+# Step 2
+cargo init variants/02-dioxus-native
+cd variants/02-dioxus-native
+cargo run
 ```
 
 ## Kiến trúc Hệ thống

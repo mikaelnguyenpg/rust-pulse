@@ -2,10 +2,14 @@
 members = [
     "core-engine",
     "variants/01-tauri-react/src-tauri", # Chỉ định đích danh shell của tauri
-    # "variants/02-dioxus-native",         # Binary thuần
+    # "variants/v2-dioxus-native",         # Binary thuần
     # "variants/03-tauri-leptos/src-tauri",
     # "variants/04-tauri-dioxus/src-tauri",
     # "benches-suite",
+]
+# Thêm dòng này để Cargo không quét folder này như một phần của workspace nữa
+exclude = [
+    "variants/v2-dioxus-native"
 ]
 resolver = "2"
 
